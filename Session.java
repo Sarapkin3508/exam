@@ -16,6 +16,10 @@ public class Session {
 
 
     public Session(String surname, String name, LocalTime timeOfSession, boolean access) {
+            if (surname == null || surname.length() < 3)
+            throw new IllegalArgumentException("surname == null or surname.length() < 3");
+        if (name == null || name.length() < 3)
+            throw new IllegalArgumentException("name == null || name.length() < 3");
         this.surname = surname;
         this.name = name;
         this.timeOfSession = timeOfSession;
@@ -23,6 +27,18 @@ public class Session {
     }
 
     public static Ticket createTicket(String type, LocalDate dateOfRegistration, LocalDate dateOfExpiry, String name, String surname, LocalDate yearOfBirth) {
+        String strWithDate = "2012-05-14"; // День открытия Фитнес клуба
+        LocalDate dayOfOpening = LocalDate.parse(strWithDate);
+        if (dateOfRegistration.isBefore(dayOfOpening) || dateOfRegistration == null)
+            throw new IllegalArgumentException("Неправильная дата");
+        if (dateOfExpiry == null)
+            throw new IllegalArgumentException("Неправильная дата");
+        if (name.length() < 2 || name == null)
+            throw new IllegalArgumentException("name.length() < 2 or name == null");
+        if (surname.length() < 2 || surname == null)
+            throw new IllegalArgumentException("surname.length() < 2 or surname == null");
+        if (dateOfRegistration.isAfter(dateOfExpiry))
+            throw new IllegalArgumentException("Дата регистрации должна быть позже даты окончания ");
         String[] types = {"fullTicket", "singleTicket", "dailyTicket"};
         Ticket ticket = null;
         switch (type) {
