@@ -106,7 +106,7 @@ public class Fitness {
         else
             gymStatus[freeSpaceGym()] = 1;
     }
-    public void returnFromGym(Ticket ticket){
+    public void returnFromGym(){
         gymStatus[notFreeSpaceGym()] = 0;
     }
     private int freeSpaceGym(){
