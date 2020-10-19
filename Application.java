@@ -144,6 +144,7 @@ public class Application {
                                     fitness.goToGym();
                                     System.out.println("Приятного времяпровождения (нажмите любую кнопку чтобы выйти из тренажерного зала)");
                                     String dummy3 = scanner.nextLine();
+                                        fitness.returnFromGym();
                                         System.out.println(dummy3);
                                     }
                                     else {
