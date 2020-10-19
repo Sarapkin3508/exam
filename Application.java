@@ -163,6 +163,15 @@ public class Application {
                             }
 
                         }while (dowhile == false);
+                        if (currentTime.isAfter(endofDay)){
+                            Fitness fitness1 = new Fitness(false, false, false);
+                            for (int p = 0;p < 20;p++) {
+                                fitness1.returnFromGroup();
+                                fitness1.returnFromGym();
+                                fitness1.returnFromPool();
+
+                            }
+                        }
                         System.out.println("Благодарим за посещение, приходите к нам ещё!");
                     }
                     else{
