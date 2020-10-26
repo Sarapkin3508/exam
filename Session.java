@@ -104,6 +104,151 @@ public class Session {
 
      return a;
     }
+        public void Check(String name, String surname, Ticket allTickets[]) {
+
+
+        int t = -1;
+        for (int i = 0; i < allTickets.length; i++) {
+            if (allTickets[i].getName() == name && allTickets[i].getSurname() == surname) {
+                t = i;
+                i = allTickets.length;
+                System.out.println(t);
+            } else {
+                t = 55;
+                i = allTickets.length;
+            }
+        }
+        if (t == 55) {
+            System.out.println("Имя и фамилия отсутсвуют в базе");
+            System.out.println("Пожалуйста, пройдите процедуру регистрации ");
+            System.out.println("Ваше имя: ");
+            String name1 = scanner.nextLine();
+            System.out.println("Ваша фамилия: ");
+            String surname1 = scanner.nextLine();
+
+            System.out.println("До какой даты хотите получить абонемент? (Формат даты: ГГГГ-ММ-ДД)");
+            String dateReg = scanner.nextLine();
+            System.out.println("Укажите дату рождения: (Формат даты: ГГГГ-ММ-ДД)");
+            String birthDate = scanner.nextLine();
+            int j = 0;
+            for (int g = 0; g < allTickets.length; g++) {
+                if (allTickets[10] == nul) {
+                    t = g;
+                    g = allTickets.length;
+                }
+
+            }
+            System.out.println("Укажите тип абонемента: 1 - Полный, 2 - Дневной, 3 - Разовый");
+            String type1;
+            int answer1 = scanner.nextInt();
+            switch (answer1){
+                case 1:
+                    type1 = "fullTicket";
+                    allTickets[t] = Session.createTicket(type1,currentDate, LocalDate.parse(dateReg), name1, surname1, LocalDate.parse(birthDate));
+                    break;
+                case 2:
+                    type1 = "dailyTicket";
+                    allTickets[t] = Session.createTicket(type1,currentDate, LocalDate.parse(dateReg), name1, surname1, LocalDate.parse(birthDate));
+                    break;
+                case 3:
+                    type1 = "singleTicket";
+                    allTickets[t] = Session.createTicket(type1,currentDate, LocalDate.parse(dateReg), name1, surname1, LocalDate.parse(birthDate));
+                    break;
+            }
+        }
+        if (t >= 0) {
+            System.out.println("Пользователь найден, тариф - " + allTickets[t].type);
+            if (currentTime.isBefore(endofDay) && currentTime.isAfter(startOfDay)){
+                if (currentDate.isBefore(allTickets[t].dateOfExpiry)){
+                    System.out.println("Фитнесс клуб открыт");
+                    if (allTickets[t].type == "dailyTicket" && currentTime.isAfter(LocalTime.of(16, 0, 0))
+                            || allTickets[t].type == "fullTicket" || allTickets[t].type == "singleTicket") {
+                        boolean dowhile = false;
+                        do {
+                            Fitness fitness = new Fitness(false, false, false);
+                            fitness.ticketAccess(allTickets[t].type);
+                            System.out.println("Какую зону вы хотите посетить? 1 - бассейн, 2 - групповые занятия, 3 - тренажерный зал, " +
+                                    "\n4 - узнать информацию о посещаемости зон, 5 - выход");
+                            int answer = scanner.nextInt();
+                            switch (answer) {
+                                case 1:
+                                    if (fitness.isAccessToPool()){
+                                        fitness.goToPool();
+                                        System.out.println("Приятного времяпровождения (нажмите любую кнопку чтобы выйти из бассейна)");
+                                        String dummy1 = scanner.nextLine();
+                                        System.out.println(dummy1);
+                                        fitness.returnFromPool();}
+                                    else {
+                                        System.out.println("Ваш тариф " + allTickets[t].type + " не имеет доступа к бассейну");
+                                    }
+                                    break;
+                                case 2:
+                                    if (fitness.isAccessToGroup()) {
+                                        fitness.goToGroup();
+                                        System.out.println("Приятного времяпровождения (нажмите любую кнопку чтобы выйти из групповых занятий)");
+                                        String dummy2 = scanner.nextLine();
+                                        System.out.println(dummy2);
+                                        fitness.returnFromGroup();
+                                    }
+                                    else {
+                                        System.out.println("Ваш тариф " + allTickets[t].type + " не имеет доступа к групповым занятиям");
+                                    }
+                                    break;
+                                case 3:
+                                    if (fitness.isAccessToGym()) {
+                                        fitness.goToGym();
+                                        System.out.println("Приятного времяпровождения (нажмите любую кнопку чтобы выйти из тренажерного зала)");
+                                        String dummy3 = scanner.nextLine();
+                                        System.out.println(dummy3);
+                                        fitness.returnFromGym();
+                                    }
+                                    else {
+                                        System.out.println("Ваш тариф " + allTickets[t].type + " не имеет доступа к тренажерному залу");
+                                    }
+                                    break;
+                                case 4:
+                                    System.out.println(fitness.output());
+                                    break;
+                                case 5:
+                                    dowhile = true;
+                                    break;
+                                default:
+                                    System.out.println("Ошибка, поробуйте ещё раз");
+                                    break;
+
+                            }
+
+                        }while (dowhile == false);
+                        if (currentTime.isAfter(endofDay)){
+                            Fitness fitness1 = new Fitness(false, false, false);
+                            for (int p = 0;p < 20;p++) {
+                                fitness1.returnFromGroup();
+                                fitness1.returnFromGym();
+                                fitness1.returnFromPool();
+
+                            }
+                        }
+                        System.out.println("Благодарим за посещение, приходите к нам ещё!");
+                    }
+                    else{
+                        System.out.println("По вашему тарифу вы можете заниматься до 16-00. Текущее время: " + currentTime);
+                    }
+
+                }
+                else {
+                    System.out.println("Ваш абонемент просрочен");
+                }
+            }
+            else {
+                System.out.println("Фитнесс клуб закрыт, приходите завтра с 8 утра!");
+            }
+
+
+
+
+        }
+
+    }
 }
 
 
